@@ -16,4 +16,3 @@ pytest==6.2.4
 python-dotenv==0.17.1
 toml==0.10.2
 Werkzeug==2.0.1
-whitenoise==5.2.0
