@@ -15,6 +15,9 @@ def index():
         description=description,
     )
 
+@portfolio.route("/health")
+def health():
+    return 200
 
 @portfolio.route("/projects/")
 def projects():
