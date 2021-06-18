@@ -17,7 +17,7 @@ def index():
 
 @portfolio.route("/health")
 def health():
-    return 200
+    return render_template("404.html"), 200
 
 @portfolio.route("/projects/")
 def projects():
