@@ -76,12 +76,12 @@ def register():
                 (username, generate_password_hash(password))
             )
             db.commit()
-            return f"User {username} created successfully"
+            return render_template("login.html")
         else:
             return error, 418
 
     ## TODO: Return an actual register page
-    return "Register Page not yet implemented", 501
+    return render_template("register.html")
 
 @portfolio.route('/login', methods=('GET', 'POST'))
 def login():
@@ -100,7 +100,7 @@ def login():
             error = 'Incorrect password.'
 
         if error is None:
-            return "login Successful", 200
+            return render_template("index.html")
         else:
             return error, 418
-    return "Login Page not yet implemented", 501
+    return render_template("login.html")
