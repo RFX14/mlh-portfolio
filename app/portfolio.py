@@ -1,7 +1,7 @@
-from werkzeug.security import generate_password_hash
-from app.db import get_db
-from flask import Blueprint, render_template
+from werkzeug.security import generate_password_hash, check_password_hash
+from flask import Blueprint, render_template, request
 from dotenv import load_dotenv
+from app.db import get_db
 
 load_dotenv()
 
@@ -53,7 +53,7 @@ def resume():
         description=description,
     )
 
-@app.route('/register', methods=('GET', 'POST'))
+@portfolio.route('/register', methods=('GET', 'POST'))
 def register():
     if request.method == 'POST':
         username = request.form.get('username')
@@ -82,3 +82,25 @@ def register():
 
     ## TODO: Return an actual register page
     return "Register Page not yet implemented", 501
+
+@portfolio.route('/login', methods=('GET', 'POST'))
+def login():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        db = get_db()
+        error = None
+        user = db.execute(
+            'SELECT * FROM user WHERE username = ?', (username,)
+        ).fetchone()
+
+        if user is None:
+            error = 'Incorrect username.'
+        elif not check_password_hash(user['password'], password):
+            error = 'Incorrect password.'
+
+        if error is None:
+            return "login Successful", 200
+        else:
+            return error, 418
+    return "Login Page not yet implemented", 501
