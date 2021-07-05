@@ -1,6 +1,5 @@
 name: Lint
 on:
-  # Triggers the workflow when pulling or pushing on main branch
   push:
     branches:
       - master
