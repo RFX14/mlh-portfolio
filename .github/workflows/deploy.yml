@@ -30,3 +30,6 @@ jobs:
 
       - name: Deploy site
         run: ssh my-vm 'cd ${{ secrets.PROJECT_ROOT }} && sudo git fetch && sudo git reset --hard origin/master && docker-compose up -d --build'
+
+      - name: Docker Status
+        run: docker-compose ps
