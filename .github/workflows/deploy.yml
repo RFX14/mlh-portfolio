@@ -31,6 +31,10 @@ jobs:
       - name: Deploy site
         run: ssh my-vm 'cd ${{ secrets.PROJECT_ROOT }} && sudo git fetch && sudo git reset --hard origin/master && docker stop $(docker ps -a -q) && docker rm $(docker ps -a -q) && docker-compose up -d --build'
 
+      - name: Backup for deploy
+        if: ${{ failure() }}
+        run: curl -s -X POST "${{ secrets.DISCORD_WEBHOOK }}" -d "content=Deployment Failed"
+
       - name: Docker Status
         run: ssh my-vm 'docker ps'
 
