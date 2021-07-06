@@ -33,3 +33,6 @@ jobs:
 
       - name: Docker Status
         run: ssh my-vm 'docker ps'
+
+      - name: Notify Discord
+        run: curl -s -X POST "${{ secrets.DISCORD_WEBHOOK }}" -d "content=Ayy Deployment Successful"
