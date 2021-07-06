@@ -36,3 +36,9 @@ jobs:
 
       - name: Notify Discord
         run: curl -s -X POST "${{ secrets.DISCORD_WEBHOOK }}" -d "content=Ayy Deployment Successful"
+
+      - name: Checkout Git repository
+        uses: actions/checkout@v2
+
+      - name: Check website status
+        uses: bash prod-test.sh
