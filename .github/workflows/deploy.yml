@@ -33,13 +33,17 @@ jobs:
 
       - name: Backup for deploy
         if: ${{ failure() }}
-        run: curl -s -X POST "${{ secrets.DISCORD_WEBHOOK }}" -d "content=Deployment Failed"
+        run: |
+          curl -s -X POST "${{ secrets.DISCORD_WEBHOOK }}" -d "content=Deployment Failed" 
+          curl -X POST "${{ secrets.DISCORD_WEBHOOK }}" -d "content=https://i.pinimg.com/originals/3e/31/34/3e3134b2f288e3d5d1ab179aa2256bfa.jpg"
 
       - name: Docker Status
         run: ssh my-vm 'docker ps'
 
       - name: Notify Discord
-        run: curl -s -X POST "${{ secrets.DISCORD_WEBHOOK }}" -d "content=Ayy Deployment Successful"
+        run: |
+          curl -s -X POST "${{ secrets.DISCORD_WEBHOOK }}" -d "content=Deployment Successful"
+          curl -s -X POST "${{ secrets.DISCORD_WEBHOOK }}" -d "content=https://tenor.com/view/joseph-joestar-nice-gif-7319727"
 
       - name: Checkout Git repository
         uses: actions/checkout@v2
