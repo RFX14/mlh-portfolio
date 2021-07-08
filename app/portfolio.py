@@ -5,6 +5,7 @@ load_dotenv()
 
 portfolio = Blueprint("portfolio", __name__, template_folder="templates")
 
+
 @portfolio.route("/")
 def index():
     title = "Miyabi"
@@ -15,9 +16,11 @@ def index():
         description=description,
     )
 
+
 @portfolio.route("/health")
 def health():
     return render_template("404.html"), 200
+
 
 @portfolio.route("/projects/")
 def projects():

@@ -7,18 +7,22 @@ from app.portfolio import portfolio
 import os
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://{user}:{passwd}@{host}:{port}/{table}'.format(
-            user=os.getenv('POSTGRES_USER'),
-            passwd=os.getenv('POSTGRES_PASSWORD'),
-            host=os.getenv('POSTGRES_HOST'),
-            port=5432,
-            table=os.getenv('POSTGRES_DB'))
+app.config[
+    "SQLALCHEMY_DATABASE_URI"
+] = "postgresql+psycopg2://{user}:{passwd}@{host}:{port}/{table}".format(
+    user=os.getenv("POSTGRES_USER"),
+    passwd=os.getenv("POSTGRES_PASSWORD"),
+    host=os.getenv("POSTGRES_HOST"),
+    port=5432,
+    table=os.getenv("POSTGRES_DB"),
+)
 
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 app.wsgi_app = WhiteNoise(app.wsgi_app, root="static/")
 app.register_blueprint(portfolio)
+
 
 @app.errorhandler(404)
 def not_found(error_message):
@@ -26,7 +30,7 @@ def not_found(error_message):
 
 
 class UserModel(db.Model):
-    __tablename__ = 'users'
+    __tablename__ = "users"
 
     username = db.Column(db.String(), primary_key=True)
     password = db.Column(db.String())
@@ -38,20 +42,21 @@ class UserModel(db.Model):
     def __repr__(self):
         return f"<User {self.username}>"
 
-@app.route('/register', methods=('GET', 'POST'))
+
+@app.route("/register", methods=("GET", "POST"))
 def register():
-    if request.method == 'POST':
-        username = request.form.get('username')
-        password = request.form.get('password')
+    if request.method == "POST":
+        username = request.form.get("username")
+        password = request.form.get("password")
         error = None
-   
+
         if not username:
-            error = 'Username is required.'
+            error = "Username is required."
         elif not password:
-            error = 'Password is required.'
+            error = "Password is required."
         elif UserModel.query.filter_by(username=username).first() is not None:
             error = f"User {username} is already registered."
-   
+
         if error is None:
             new_user = UserModel(username, generate_password_hash(password))
             db.session.add(new_user)
@@ -62,23 +67,24 @@ def register():
 
     ## TODO: Return an actual register page
     return render_template("register.html")
-   
-@app.route('/login', methods=('GET', 'POST'))
+
+
+@app.route("/login", methods=("GET", "POST"))
 def login():
-    if request.method == 'POST':
-        username = request.form.get('username')
-        password = request.form.get('password')
+    if request.method == "POST":
+        username = request.form.get("username")
+        password = request.form.get("password")
         error = None
         user = UserModel.query.filter_by(username=username).first()
-        
+
         if user is None:
-             error = 'Incorrect username.'
+            error = "Incorrect username."
         elif not check_password_hash(user.password, password):
-             error = 'Incorrect password.'
-             
+            error = "Incorrect password."
+
         if error is None:
-             return render_template("index.html")
+            return render_template("index.html")
         else:
             return error, 418
-    
+
     return render_template("login.html")
