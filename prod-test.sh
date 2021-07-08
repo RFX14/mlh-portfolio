@@ -2,7 +2,7 @@
 
 url="https://miyabi.duckdns.org"
 
-# sleep 5
+sleep 5
 
 resp=$(curl -s -w "%{http_code}" GET $url)
 result=${resp: -3}
